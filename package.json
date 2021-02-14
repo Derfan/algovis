@@ -1,19 +1,42 @@
 {
   "name": "algovis",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Tool for algorithm visualization",
   "scripts": {
+    "build": "webpack --mode=production",
+    "watch": "webpack --watch",
+    "start": "webpack serve --mode=development",
+    "lint": "eslint -c src/.eslintrc --ext .js,.json src",
+    "lint:fix": "npm run lint -- --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Derfan/algovis.git"
   },
-  "author": "",
+  "author": "Borys Medvediev <medvediev.b@gmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Derfan/algovis/issues"
   },
-  "homepage": "https://github.com/Derfan/algovis#readme"
+  "homepage": "https://github.com/Derfan/algovis#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "7.12.13",
+    "@babel/plugin-proposal-export-default-from": "7.12.13",
+    "@babel/plugin-transform-runtime": "^7.12.15",
+    "@babel/preset-env": "7.12.13",
+    "babel-eslint": "10.1.0",
+    "babel-loader": "8.2.2",
+    "clean-webpack-plugin": "3.0.0",
+    "eslint": "7.19.0",
+    "eslint-config-airbnb-base": "14.2.1",
+    "eslint-import-resolver-webpack": "^0.13.0",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-json": "2.1.2",
+    "html-webpack-plugin": "5.0.0",
+    "webpack": "5.21.2",
+    "webpack-cli": "4.5.0",
+    "webpack-dev-server": "3.11.2"
+  }
 }

@@ -1,0 +1,1 @@
+export generateArray from './generateArray';

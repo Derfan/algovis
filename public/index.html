@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <meta name="theme-color" content="#ffffff" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+        }
+
+        .wrapper {
+            display: flex;
+        }
+
+        .sidebar {
+            min-width: 20%;
+        }
+
+        .sidebar-form {
+            display: flex;
+            flex-direction: column;
+
+            padding: 0 20px;
+        }
+
+        .disabled {
+            color: grey;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content {
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #chart {
+            border: 1px solid #ededed;
+        }
+
+        #chart > g {
+            transition: transform .5s;
+        }
+    </style>
+</head>
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="app">
+        <div class="wrapper">
+            <div class="sidebar">
+                <form id="settings" class="sidebar-form">
+                    <p>
+                        <input type="radio" id="bubbleSort" name="sortingType" value="bubbleSort" checked>
+                        <label for="bubbleSort">Bubble Sort</label>
+                    </p>
+                    <p class="disabled">
+                        <input type="radio" id="selectionSort" name="sortingType" value="selectionSort" disabled>
+                        <label for="selectionSort">Selection Sort</label>
+                    </p>
+                    <p class="disabled">
+                        <input type="radio" id="insertionSort" name="sortingType" value="insertionSort" disabled>
+                        <label for="insertionSort">Insertion Sort</label>
+                    </p>
+
+                    <button type="submit">Start Sorting</button>
+                </form>
+            </div>
+            <div class="content">
+                <svg id="chart"></svg>
+
+                <p class="input-group">
+                    <label for="arrayLength" class="input-label">
+                        Array Length:
+                        <span id="currentLength">10</span>
+                    </label>
+                    <input id="arrayLength" name="arrayLength" class="input-field" type="range" min="2" max="50" step="1" value="10">
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
