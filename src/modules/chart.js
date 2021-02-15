@@ -47,7 +47,7 @@ class Chart {
           this.elements[idx2] = elem1;
         }
         resolve();
-      }, 500);
+      }, 600);
     });
   }
 
@@ -84,13 +84,13 @@ class Chart {
     const containerWidth = this.chart.width.baseVal.value;
     const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     const textNode = document.createTextNode('Done!');
-    const textWidth = 65;
+    const textWidth = 102.61;
 
     text.appendChild(textNode);
     text.setAttribute('x', containerWidth / 2 - textWidth / 2);
     text.setAttribute('y', 300);
 
-    text.style.fontSize = '26px';
+    text.style.fontSize = '40px';
     text.style.fill = 'red';
 
     this.chart.appendChild(text);
@@ -112,6 +112,7 @@ class Chart {
       const textWidth = textWidthByLength[`${number}`.length];
 
       rect.setAttribute('fill', '#0088CC');
+      rect.setAttribute('rx', 10);
       rect.setAttribute('x', xElementPosition);
       rect.setAttribute('width', elementWidth);
       rect.setAttribute('height', number);

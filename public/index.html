@@ -4,6 +4,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <meta name="theme-color" content="#ffffff" />
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,21 +15,45 @@
         html, body {
             padding: 0;
             margin: 0;
+
+            font-family: 'Roboto', sans-serif;
+        }
+
+        ul, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style: none;
         }
 
         .wrapper {
             display: flex;
         }
 
-        .sidebar {
-            min-width: 20%;
-        }
-
-        .sidebar-form {
+        .form {
             display: flex;
             flex-direction: column;
+            margin-top: 20px;
+        }
 
-            padding: 0 20px;
+        .options-list {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        .options-list-item {
+            display: flex;
+            margin-left: 20px;
+        }
+
+        .button {
+            margin-top: 20px;
+        }
+
+        .options-list-item:first-child {
+            margin-left: 0;
         }
 
         .disabled {
@@ -53,40 +79,53 @@
         #chart > g {
             transition: transform .5s;
         }
+
+        #chart > g > rect {
+            transition: fill .3s;
+        }
     </style>
 </head>
 <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="app">
         <div class="wrapper">
-            <div class="sidebar">
-                <form id="settings" class="sidebar-form">
-                    <p>
-                        <input type="radio" id="bubbleSort" name="sortingType" value="bubbleSort" checked>
-                        <label for="bubbleSort">Bubble Sort</label>
-                    </p>
-                    <p class="disabled">
-                        <input type="radio" id="selectionSort" name="sortingType" value="selectionSort" disabled>
-                        <label for="selectionSort">Selection Sort</label>
-                    </p>
-                    <p class="disabled">
-                        <input type="radio" id="insertionSort" name="sortingType" value="insertionSort" disabled>
-                        <label for="insertionSort">Insertion Sort</label>
-                    </p>
-
-                    <button type="submit">Start Sorting</button>
-                </form>
-            </div>
             <div class="content">
                 <svg id="chart"></svg>
 
-                <p class="input-group">
-                    <label for="arrayLength" class="input-label">
-                        Array Length:
-                        <span id="currentLength">10</span>
-                    </label>
-                    <input id="arrayLength" name="arrayLength" class="input-field" type="range" min="2" max="50" step="1" value="10">
-                </p>
+                <form id="settings" class="form">
+                    <p class="input-group">
+                        <label for="arrayLength" class="input-label">
+                            Array Length:
+                            <span id="currentLength">10</span>
+                        </label>
+                        <input id="arrayLength" name="arrayLength" class="input-field" type="range" min="2" max="50" step="1" value="10">
+                    </p>
+
+                    <ul class="options-list">
+                        <li class="options-list-item">
+                            <input type="radio" id="bubbleSort" name="sortingType" value="bubbleSort" checked>
+                            <label for="bubbleSort">Bubble Sort</label>
+                        </li>
+                        <li class="options-list-item disabled">
+                            <input type="radio" id="selectionSort" name="sortingType" value="selectionSort" disabled>
+                            <label for="selectionSort">Selection Sort</label>
+                        </li>
+                        <li class="options-list-item disabled">
+                            <input type="radio" id="insertionSort" name="sortingType" value="insertionSort" disabled>
+                            <label for="insertionSort">Insertion Sort</label>
+                        </li>
+                        <li class="options-list-item disabled">
+                            <input type="radio" id="mergeSort" name="sortingType" value="mergeSort" disabled>
+                            <label for="mergeSort">Merge Sort</label>
+                        </li>
+                        <li class="options-list-item disabled">
+                            <input type="radio" id="quickSort" name="sortingType" value="quickSort" disabled>
+                            <label for="quickSort">Quick Sort</label>
+                        </li>
+                    </ul>
+
+                    <button type="submit" class="button">Start Sorting</button>
+                </form>
             </div>
         </div>
     </div>
