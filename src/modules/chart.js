@@ -1,3 +1,4 @@
+const DELAY = 600;
 const settings = {
   width: 800,
   height: 500,
@@ -30,6 +31,17 @@ class Chart {
     element.currentOffset = value;
   }
 
+  moveElement(idx, { steps, direction }) {
+    const { currentOffset, offset, node } = this.elements[idx];
+    const x = {
+      right: currentOffset + steps * offset,
+      left: currentOffset - steps * offset,
+    }[direction];
+
+    node.setAttribute('style', `transform: translate(${x}px, 0);`);
+    this.updateCurrentOffset(idx, x);
+  }
+
   swap(idx1, idx2) {
     const elem1 = this.elements[idx1];
     const elem2 = this.elements[idx2];
@@ -37,27 +49,22 @@ class Chart {
     return new Promise((resolve) => {
       setTimeout(() => {
         if (elem1.value > elem2.value) {
-          elem1.node.setAttribute('style', `transform: translate(${elem1.currentOffset + elem1.offset}px, 0);`);
-          elem2.node.setAttribute('style', `transform: translate(${elem2.currentOffset - elem2.offset}px, 0);`);
-
-          this.updateCurrentOffset(idx1, elem1.currentOffset + elem1.offset);
-          this.updateCurrentOffset(idx2, elem2.currentOffset - elem2.offset);
+          this.moveElement(idx1, { steps: 1, direction: 'right' });
+          this.moveElement(idx2, { steps: 1, direction: 'left' });
 
           this.elements[idx1] = elem2;
           this.elements[idx2] = elem1;
         }
         resolve();
-      }, 600);
+      }, DELAY);
     });
   }
 
-  async sort(type) {
-    console.log('Sorting type: ', type);
-
-    let length = this.elements.length - 1;
+  async bubbleSort() {
+    let to = this.elements.length - 1;
 
     for (let j = 0; j < this.elements.length; j += 1) {
-      for (let i = 0; i < length; i += 1) {
+      for (let i = 0; i < to; i += 1) {
         const lerfRect = this.elements[i].node.querySelector('rect');
         const rightRect = this.elements[i + 1].node.querySelector('rect');
 
@@ -70,14 +77,65 @@ class Chart {
         rightRect.style.fill = '';
       }
 
-      const lastRect = this.elements[length].node.querySelector('rect');
+      const lastRect = this.elements[to].node.querySelector('rect');
 
       lastRect.style.fill = 'green';
 
-      length -= 1;
+      to -= 1;
     }
 
     this.showSuccesMessage();
+  }
+
+  fillElement(idx, fill) {
+    const element = this.elements[idx];
+    const rect = element.node.querySelector('rect');
+
+    rect.style.fill = fill;
+
+    return element;
+  }
+
+  async selectionSort() {
+    let from = 0;
+
+    for (let i = 0; i < this.elements.length; i += 1) {
+      let min = this.fillElement(from, 'yellow');
+
+      for (let j = from + 1; j < this.elements.length; j += 1) {
+        const current = this.fillElement(j, 'purple');
+
+        await new Promise(resolve => {
+          setTimeout(() => {
+            if (current.value < min.value) {
+              this.fillElement(this.elements.indexOf(min), '');
+              min = this.fillElement(j, 'yellow');
+            } else {
+              this.fillElement(j, '');
+            }
+            resolve();
+          }, DELAY);
+        });
+      }
+
+      const minIdx = this.elements.indexOf(min, from);
+
+      this.moveElement(minIdx, { direction: 'left', steps: minIdx - from });
+      this.moveElement(from, { direction: 'right', steps: minIdx - from });
+      this.fillElement(minIdx, 'green');
+      this.elements[minIdx] = this.elements[from];
+      this.elements[from] = min;
+
+      from += 1;
+    }
+
+    this.showSuccesMessage();
+  }
+
+  sort(type) {
+    console.log('Sorting type: ', type);
+
+    this[type]();
   }
 
   showSuccesMessage() {
