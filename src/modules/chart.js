@@ -1,3 +1,5 @@
+import Elements from 'models/elements';
+
 const DELAY = 600;
 const settings = {
   width: 800,
@@ -8,7 +10,7 @@ const textWidthByLength = { 1: 8, 2: 16, 3: 24 };
 class Chart {
   constructor() {
     this.chart = document.getElementById('chart');
-    this.elements = [];
+    this.elements = new Elements();
 
     this.chart.setAttribute('width', settings.width);
     this.chart.setAttribute('height', settings.height);
@@ -16,7 +18,7 @@ class Chart {
   }
 
   clear() {
-    this.elements = [];
+    this.elements = new Elements();
     this.chart.innerHTML = '';
   }
 
@@ -25,35 +27,27 @@ class Chart {
     this.render(elements);
   }
 
-  updateCurrentOffset(idx, value) {
-    const element = this.elements[idx];
-
-    element.currentOffset = value;
-  }
-
   moveElement(idx, { steps, direction }) {
-    const { currentOffset, offset, node } = this.elements[idx];
+    const { currentOffset, offset, node } = this.elements.getElement(idx);
     const x = {
       right: currentOffset + steps * offset,
       left: currentOffset - steps * offset,
     }[direction];
 
     node.setAttribute('style', `transform: translate(${x}px, 0);`);
-    this.updateCurrentOffset(idx, x);
+    this.elements.updateField(idx, 'currentOffset', x);
   }
 
   swap(idx1, idx2) {
-    const elem1 = this.elements[idx1];
-    const elem2 = this.elements[idx2];
+    const elem1 = this.elements.getElement(idx1);
+    const elem2 = this.elements.getElement(idx2);
 
     return new Promise((resolve) => {
       setTimeout(() => {
         if (elem1.value > elem2.value) {
           this.moveElement(idx1, { steps: 1, direction: 'right' });
           this.moveElement(idx2, { steps: 1, direction: 'left' });
-
-          this.elements[idx1] = elem2;
-          this.elements[idx2] = elem1;
+          this.elements.swap(idx1, idx2);
         }
         resolve();
       }, DELAY);
@@ -61,34 +55,29 @@ class Chart {
   }
 
   async bubbleSort() {
-    let to = this.elements.length - 1;
+    let last = this.elements.length - 1;
 
     for (let j = 0; j < this.elements.length; j += 1) {
-      for (let i = 0; i < to; i += 1) {
-        const lerfRect = this.elements[i].node.querySelector('rect');
-        const rightRect = this.elements[i + 1].node.querySelector('rect');
-
-        lerfRect.style.fill = 'yellow';
-        rightRect.style.fill = 'yellow';
+      for (let i = 0; i < last; i += 1) {
+        this.fillElement(i, 'yellow');
+        this.fillElement(i + 1, 'yellow');
 
         await this.swap(i, i + 1);
 
-        lerfRect.style.fill = '';
-        rightRect.style.fill = '';
+        this.fillElement(i, '');
+        this.fillElement(i + 1, '');
       }
 
-      const lastRect = this.elements[to].node.querySelector('rect');
+      this.fillElement(last, 'green');
 
-      lastRect.style.fill = 'green';
-
-      to -= 1;
+      last -= 1;
     }
 
     this.showSuccesMessage();
   }
 
   fillElement(idx, fill) {
-    const element = this.elements[idx];
+    const element = this.elements.getElement(idx);
     const rect = element.node.querySelector('rect');
 
     rect.style.fill = fill;
@@ -108,7 +97,7 @@ class Chart {
         await new Promise(resolve => {
           setTimeout(() => {
             if (current.value < min.value) {
-              this.fillElement(this.elements.indexOf(min), '');
+              this.fillElement(this.elements.getIndex(min), '');
               min = this.fillElement(j, 'yellow');
             } else {
               this.fillElement(j, '');
@@ -118,13 +107,12 @@ class Chart {
         });
       }
 
-      const minIdx = this.elements.indexOf(min, from);
+      const minIdx = this.elements.getIndex(min, from);
 
       this.moveElement(minIdx, { direction: 'left', steps: minIdx - from });
       this.moveElement(from, { direction: 'right', steps: minIdx - from });
       this.fillElement(minIdx, 'green');
-      this.elements[minIdx] = this.elements[from];
-      this.elements[from] = min;
+      this.elements.swap(minIdx, from);
 
       from += 1;
     }
@@ -182,7 +170,7 @@ class Chart {
       group.appendChild(text);
 
       this.chart.appendChild(group);
-      this.elements.push({
+      this.elements.add({
         node: group,
         value: number,
         currentOffset: 0,
