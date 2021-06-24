@@ -142,6 +142,7 @@ class Chart {
 
   render(nums) {
     const containerWidth = this.chart.width.baseVal.value;
+    const containerHeight = this.chart.height.baseVal.value;
     const gapWidth = containerWidth * 0.0005;
     const elementWidth = (containerWidth / nums.length) - gapWidth * 2;
     const offset = elementWidth + gapWidth * 2;
@@ -149,6 +150,7 @@ class Chart {
 
     for (let i = 0; i < nums.length; i += 1) {
       const number = nums[i];
+      const yElementPosition = containerHeight - number;
       const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
       const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -158,11 +160,12 @@ class Chart {
       rect.setAttribute('fill', '#0088CC');
       rect.setAttribute('rx', 10);
       rect.setAttribute('x', xElementPosition);
+      rect.setAttribute('y', yElementPosition);
       rect.setAttribute('width', elementWidth);
       rect.setAttribute('height', number);
       group.appendChild(rect);
       text.setAttribute('x', elementWidth / 2 - textWidth / 2 + xElementPosition);
-      text.setAttribute('y', number + 16);
+      text.setAttribute('y', yElementPosition - 16);
       text.appendChild(textNode);
       group.setAttribute('style', 'transform: translate(0, 0)');
       group.appendChild(text);
