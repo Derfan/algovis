@@ -1,5 +1,3 @@
-import { App } from 'modules';
+import { sortingApp } from 'modules';
 
-const app = new App();
-
-app.init();
+sortingApp.init();

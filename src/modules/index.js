@@ -1,2 +1,1 @@
-export App from './app';
-export Chart from './chart';
+export sortingApp from './app';

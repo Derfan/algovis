@@ -5,27 +5,19 @@ class FormController {
   constructor(model, view) {
     this.model = model;
     this.view = view;
-
-    this.htmlElements = {
-      form: this.view.htmlForm,
-      input: document.getElementById('arrayLength'),
-      text: document.getElementById('currentLength'),
-    };
-
     this.callbacks = new Map();
-
-    this.view.sortingTypeOptions = this.model.sortingOptions;
 
     this.changeArrayLengthHandler = this.changeArrayLengthHandler.bind(this);
     this.submitFormHandler = this.submitFormHandler.bind(this);
   }
 
   get arrayLength() {
-    return this.htmlElements.input.value;
+    return this.model.arrayLength;
   }
 
-  get sortingType() {
-    return this.htmlElements.form.elements.sortingType.value;
+  set arrayLength(value) {
+    this.model.arrayLength = value;
+    this.view.lengthTextNode.innerText = value;
   }
 
   set eventHandlers(handlers) {
@@ -49,7 +41,7 @@ class FormController {
 
     const { value } = event.target;
 
-    this.htmlElements.text.innerText = value;
+    this.arrayLength = value;
     this.emitCallbacks('change', value);
   }
 
@@ -57,17 +49,20 @@ class FormController {
     event.preventDefault();
     event.stopPropagation();
 
-    this.emitCallbacks('submit');
+    const { elements: { sortingType } } = event.target;
+
+    this.emitCallbacks('submit', sortingType.value);
   }
 
   addListeners() {
-    this.htmlElements.input.addEventListener('change', this.changeArrayLengthHandler);
-    this.htmlElements.form.addEventListener('submit', this.submitFormHandler);
+    this.view.lengthInput.addEventListener('change', this.changeArrayLengthHandler);
+    this.view.htmlForm.addEventListener('submit', this.submitFormHandler);
   }
 
   init(handlers) {
     this.eventHandlers = handlers;
-    this.view.render();
+    this.view.sortingTypeOptions = this.model.sortingOptions;
+    this.view.render({ arrayLength: this.arrayLength });
     this.addListeners();
   }
 }
