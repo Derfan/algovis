@@ -73,7 +73,7 @@ class Chart {
       last -= 1;
     }
 
-    this.showSuccesMessage();
+    this.showSuccessMessage();
   }
 
   fillElement(idx, fill) {
@@ -94,7 +94,7 @@ class Chart {
       for (let j = from + 1; j < this.elements.length; j += 1) {
         const current = this.fillElement(j, 'purple');
 
-        await new Promise(resolve => {
+        await new Promise((resolve) => {
           setTimeout(() => {
             if (current.value < min.value) {
               this.fillElement(this.elements.getIndex(min), '');
@@ -117,16 +117,14 @@ class Chart {
       from += 1;
     }
 
-    this.showSuccesMessage();
+    this.showSuccessMessage();
   }
 
   sort(type) {
-    console.log('Sorting type: ', type);
-
     this[type]();
   }
 
-  showSuccesMessage() {
+  showSuccessMessage() {
     const containerWidth = this.chart.width.baseVal.value;
     const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     const textNode = document.createTextNode('Done!');

@@ -1,54 +1,38 @@
 import { generateArray } from 'helpers';
 import Chart from './chart';
+import settingsForm from './settingsForm';
 
 class App {
   constructor() {
-    this.htmlElements = {
-      root: document.getElementById('app'),
-      settingsForm: document.getElementById('settings'),
-      lengthInput: document.getElementById('arrayLength'),
-      lengthText: document.getElementById('currentLength'),
-    };
+    this.root = document.getElementById('app');
 
-    this.currentArrayLength = this.htmlElements.lengthInput.value;
-    this.currentArray = generateArray(this.currentArrayLength);
+    this.form = settingsForm;
     this.chart = new Chart();
+
+    this.currentArrayLength = this.form.arrayLength;
+    this.currentArray = generateArray(this.currentArrayLength);
 
     this.changeHandler = this.changeHandler.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
   }
 
-  changeCurrentLength(newValue) {
-    const { lengthText } = this.htmlElements;
-
-    lengthText.innerText = newValue;
-    this.currentArrayLength = newValue;
-    this.currentArray = generateArray(newValue);
+  get handlers() {
+    return [
+      { type: 'change', cb: this.changeHandler },
+      { type: 'submit', cb: this.submitHandler },
+    ];
   }
 
-  changeHandler(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    this.changeCurrentLength(event.target.value);
-    this.chart.update(this.currentArray);
+  changeHandler(arrayLength) {
+    this.chart.update(generateArray(arrayLength));
   }
 
-  submitHandler(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const { sortingType } = event.target.elements;
-
-    this.chart.sort(sortingType.value);
+  submitHandler() {
+    this.chart.sort(this.form.sortingType);
   }
 
   init() {
-    const { lengthInput, settingsForm } = this.htmlElements;
-
-    settingsForm.addEventListener('submit', this.submitHandler);
-    lengthInput.addEventListener('change', this.changeHandler);
-
+    this.form.init(this.handlers);
     this.chart.render(this.currentArray);
 
     return this.root;
