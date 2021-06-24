@@ -6,9 +6,6 @@ class FormController {
     this.model = model;
     this.view = view;
     this.callbacks = new Map();
-
-    this.changeArrayLengthHandler = this.changeArrayLengthHandler.bind(this);
-    this.submitFormHandler = this.submitFormHandler.bind(this);
   }
 
   get arrayLength() {
@@ -35,7 +32,12 @@ class FormController {
     callbackList.forEach((cb) => cb(...args));
   }
 
-  changeArrayLengthHandler(event) {
+  addListeners() {
+    this.view.lengthInput.addEventListener('change', this.changeArrayLengthHandler);
+    this.view.htmlForm.addEventListener('submit', this.submitFormHandler);
+  }
+
+  changeArrayLengthHandler = (event) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -45,7 +47,7 @@ class FormController {
     this.emitCallbacks('change', value);
   }
 
-  submitFormHandler(event) {
+  submitFormHandler = (event) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -54,15 +56,10 @@ class FormController {
     this.emitCallbacks('submit', sortingType.value);
   }
 
-  addListeners() {
-    this.view.lengthInput.addEventListener('change', this.changeArrayLengthHandler);
-    this.view.htmlForm.addEventListener('submit', this.submitFormHandler);
-  }
-
   init(handlers) {
-    this.eventHandlers = handlers;
     this.view.sortingTypeOptions = this.model.sortingOptions;
     this.view.render({ arrayLength: this.arrayLength });
+    this.eventHandlers = handlers;
     this.addListeners();
   }
 }

@@ -1,3 +1,4 @@
+import { generateArray } from 'helpers';
 import Elements from 'models/elements';
 
 const DELAY = 600;
@@ -22,9 +23,9 @@ class Chart {
     this.chart.innerHTML = '';
   }
 
-  update(elements) {
+  update = (arrayLength) => {
     this.clear();
-    this.render(elements);
+    this.render(arrayLength);
   }
 
   moveElement(idx, { steps, direction }) {
@@ -120,7 +121,7 @@ class Chart {
     this.showSuccessMessage();
   }
 
-  sort(type) {
+  sort = (type) => {
     this[type]();
   }
 
@@ -140,7 +141,8 @@ class Chart {
     this.chart.appendChild(text);
   }
 
-  render(nums) {
+  render(options) {
+    const nums = generateArray(options.arrayLength);
     const containerWidth = this.chart.width.baseVal.value;
     const containerHeight = this.chart.height.baseVal.value;
     const gapWidth = containerWidth * 0.0005;
