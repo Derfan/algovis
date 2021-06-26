@@ -1,3 +1,5 @@
+import templates from './templates';
+
 export default class FormView {
   constructor() {
     this.form = document.getElementById('settings');
@@ -33,34 +35,10 @@ export default class FormView {
     this.sortingOptions = value;
   }
 
-  static inputRangeTemplate({
-    min, max, step, value,
-  }) {
-    return `
-      <p class="input-group">
-          <label for="arrayLength" class="input-label">
-              Amount of Elements:
-              <span id="currentLength">10</span>
-          </label>
-          <input id="arrayLength" name="arrayLength" class="input-field" type="range" min="${min}" max="${max}" step="${step}" value="${value}">
-      </p>`;
-  }
-
-  static radioButtonTemplate({
-    value, label, disabled, selected,
-  }) {
-    return `
-        <li class="options-list-item${disabled ? ' disabled' : ''}">
-             <input type="radio" id="${value}" name="sortingType" value="${value}" ${disabled ? 'disabled' : ''} ${selected ? 'checked' : ''}>
-             <label for="${value}">${label}</label>
-        </li>
-    `;
-  }
-
   renderInputRange(value) {
     const inputWrapper = document.createElement('div');
 
-    inputWrapper.innerHTML = FormView.inputRangeTemplate({
+    inputWrapper.innerHTML = templates.inputRangeTemplate({
       min: 2, step: 1, max: 50, value,
     });
     this.form.appendChild(inputWrapper);
@@ -73,7 +51,7 @@ export default class FormView {
 
     list.classList.add('options-list');
     list.innerHTML = this.sortingOptions.reduce(
-      (acc, item, idx) => acc + FormView.radioButtonTemplate({ ...item, selected: idx === 0 }),
+      (acc, item, idx) => acc + templates.radioButtonTemplate({ ...item, selected: idx === 0 }),
       '',
     );
     this.form.appendChild(list);
@@ -87,8 +65,8 @@ export default class FormView {
     this.form.appendChild(button);
   }
 
-  render(options) {
-    this.renderInputRange(options.arrayLength);
+  render({ arrayLength }) {
+    this.renderInputRange(arrayLength);
     this.renderRadioButtons();
     this.renderSubmitButton();
   }
