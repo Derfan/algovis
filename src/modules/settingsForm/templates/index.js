@@ -5,9 +5,18 @@ function inputRangeTemplate({
       <p class="input-group">
           <label for="arrayLength" class="input-label">
               Amount of Elements:
-              <span id="currentLength">10</span>
+              <span id="currentLength">${value}</span>
           </label>
-          <input id="arrayLength" name="arrayLength" class="input-field" type="range" min="${min}" max="${max}" step="${step}" value="${value}">
+          <input
+            id="arrayLength"
+            name="arrayLength"
+            class="input-field"
+            type="range"
+            min="${min}"
+            max="${max}"
+            step="${step}"
+            value="${value}"
+          />
       </p>`;
 }
 
@@ -16,7 +25,7 @@ function radioButtonTemplate({
 }) {
   return `
         <li class="options-list-item${disabled ? ' disabled' : ''}">
-             <input type="radio" id="${value}" name="sortingType" value="${value}" ${disabled ? 'disabled' : ''} ${selected ? 'checked' : ''}>
+             <input type="radio" id="${value}" name="sortingType" value="${value}" ${disabled ? 'disabled' : ''} ${selected ? 'checked' : ''} />
              <label for="${value}">${label}</label>
         </li>
     `;

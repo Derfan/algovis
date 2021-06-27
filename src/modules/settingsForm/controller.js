@@ -53,10 +53,10 @@ export default class FormController {
       this.emitCallbacks('submit', sortingType.value);
     }
 
-    init(handlers) {
+    init({ callbacks }) {
       this.view.sortingTypeOptions = this.model.sortingOptions;
       this.view.render({ arrayLength: this.arrayLength });
-      this.eventHandlers = handlers;
+      this.eventHandlers = callbacks;
       this.addListeners();
     }
 }

@@ -5,6 +5,7 @@ export default class FormView {
     this.form = document.getElementById('settings');
     this.input = null;
     this.lengthText = null;
+    this.sortingOptions = [];
   }
 
   set htmlForm(value) {
@@ -39,7 +40,7 @@ export default class FormView {
     const inputWrapper = document.createElement('div');
 
     inputWrapper.innerHTML = templates.inputRangeTemplate({
-      min: 2, step: 1, max: 50, value,
+      min: 2, step: 1, max: 30, value,
     });
     this.form.appendChild(inputWrapper);
     this.lengthInput = document.getElementById('arrayLength');
