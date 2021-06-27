@@ -60,14 +60,13 @@ export default class SortingChartView {
   }
 
   generateElementsList(values) {
-    const { width: containerWidth, height: containerHeight } = this.settings;
-    const stroke = 1;
+    const { width: containerWidth, height: containerHeight, itemBorderWidth } = this.settings;
 
     return values.map((value, idx, arr) => {
       const gapWidth = containerWidth * 0.01;
       const width = (containerWidth - gapWidth * (arr.length + 1)) / arr.length;
       const x = (idx + 1) * gapWidth + idx * width;
-      const y = containerHeight - value - stroke;
+      const y = containerHeight - value - itemBorderWidth;
 
       return {
         value,
