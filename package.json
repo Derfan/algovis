@@ -6,7 +6,7 @@
     "build": "webpack --mode=production",
     "watch": "webpack --watch",
     "start": "webpack serve --mode=development",
-    "lint": "eslint -c src/.eslintrc --ext .js,.json src",
+    "lint": "eslint --ext .js,.json src",
     "lint:fix": "npm run lint -- --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
