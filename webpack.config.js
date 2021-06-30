@@ -64,4 +64,4 @@ module.exports = (_, { mode }) => {
   }
 
   return config;
-}
+};
