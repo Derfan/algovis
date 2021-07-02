@@ -32,7 +32,6 @@ export default class SortingChartController {
         this.view.markAsProcessing(el1);
         this.view.markAsProcessing(el2);
 
-        // eslint-disable-next-line no-await-in-loop
         await sleep(this.view.transitionDelay).then(() => {
           if (n1 > n2) {
             this.model.swap(i, i + 1);
@@ -47,6 +46,39 @@ export default class SortingChartController {
       lastIdx -= 1;
     }
     this.view.markAsSorted(this.elements[lastIdx].element);
+    this.view.showSuccessMessage();
+  }
+
+  async selectionSort() {
+    let startIdx = 0;
+
+    for (let i = 0; i < this.elements.length - 1; i += 1) {
+      let selected = { idx: startIdx, ...this.elements[startIdx] };
+
+      for (let j = startIdx; j < this.elements.length; j += 1) {
+        const current = { idx: j, ...this.elements[j] };
+
+        this.view.markAsSorted(selected.element);
+        this.view.markAsProcessing(current.element);
+
+        await sleep(this.view.transitionDelay).then(() => {
+          if (selected.value > current.value) {
+            this.view.markAsBase(selected.element);
+            selected = current;
+            this.view.markAsSorted(selected.element);
+          } else {
+            this.view.markAsBase(current.element);
+          }
+        });
+      }
+
+      this.view.swap(this.elements[startIdx].element, selected.element);
+      this.model.swap(startIdx, selected.idx);
+
+      startIdx += 1;
+    }
+
+    this.view.markAsSorted(this.elements[startIdx].element);
     this.view.showSuccessMessage();
   }
 

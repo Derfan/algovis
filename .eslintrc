@@ -23,5 +23,8 @@
         "ecmaVersion": 12,
         "sourceType": "module"
     },
-    "rules": {}
+    "rules": {
+        "no-await-in-loop": "off",
+        "no-loop-func": "off"
+    }
 }
