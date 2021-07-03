@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 const PATHS = {
   build: path.join(__dirname, 'build'),
@@ -42,6 +43,7 @@ module.exports = (_, { mode }) => {
         inject: true,
         template: path.resolve(PATHS.static, 'index.html'),
       }),
+      new CompressionPlugin(),
     ],
     output: {
       filename: '[name].bundle.js',
