@@ -1,4 +1,4 @@
-export function bubbleSort(array) {
+function bubbleSort(array) {
   const result = [...array];
   let lastIdx = result.length - 1;
 
@@ -19,7 +19,7 @@ export function bubbleSort(array) {
   return result;
 }
 
-export function selectionSort(array) {
+function selectionSort(array) {
   const result = [...array];
   let startIdx = 0;
 
@@ -46,14 +46,36 @@ export function selectionSort(array) {
   return result;
 }
 
-export function insertionSort(array) {
+function insertionSort(array) {
+  const sorted = [array[0]];
+  const unsorted = [...array.slice(1)];
+
+  while (sorted.length !== array.length) {
+    const current = unsorted[0];
+    let position = sorted.length;
+
+    for (let i = 0; i < sorted.length; i += 1) {
+      if (current < sorted[i]) {
+        position = i;
+        break;
+      }
+    }
+
+    unsorted.shift();
+    sorted.splice(position, 0, current);
+  }
+
+  return sorted;
+}
+
+function mergeSort(array) {
   return array;
 }
 
-export function mergeSort(array) {
+function quickSort(array) {
   return array;
 }
 
-export function quickSort(array) {
-  return array;
-}
+export {
+  bubbleSort, selectionSort, insertionSort, quickSort, mergeSort,
+};
