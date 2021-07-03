@@ -15,7 +15,7 @@ export default class SortingChartController {
   }
 
   shuffle = (numberOfElements) => {
-    this.elements = generateArray(numberOfElements);
+    this.elements = generateArray(+numberOfElements);
     this.view.update({ elements: this.elements });
   }
 
@@ -87,7 +87,7 @@ export default class SortingChartController {
   }
 
   init({ numberOfElements }) {
-    this.elements = generateArray(numberOfElements);
+    this.elements = generateArray(+numberOfElements);
     this.view.render({ elements: this.elements });
   }
 }
