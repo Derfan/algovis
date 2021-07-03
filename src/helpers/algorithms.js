@@ -34,7 +34,7 @@ function selectionSort(array) {
       }
     }
 
-    const targetIdx = result.indexOf(target);
+    const targetIdx = result.indexOf(target, startIdx);
     const temp = result[targetIdx];
 
     result[targetIdx] = result[startIdx];
