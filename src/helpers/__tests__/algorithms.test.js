@@ -17,16 +17,18 @@ describe('bubbleSort', () => {
 
 describe('selectionSort', () => {
   test('should sort array without changing prop', () => {
-    mock.forEach(({ initial, target }) => {
-      expect(selectionSort(target)).toEqual(initial);
+    mock.forEach(({ initial, target, result }) => {
+      expect(selectionSort(target)).toEqual(result);
+      expect(target).toEqual(initial);
     });
   });
 });
 
 describe('insertionSort', () => {
   test('should sort array without changing prop', () => {
-    mock.forEach(({ initial, target }) => {
-      expect(insertionSort(target)).toEqual(initial);
+    mock.forEach(({ initial, target, result }) => {
+      expect(insertionSort(target)).toEqual(result);
+      expect(target).toEqual(initial);
     });
   });
 });

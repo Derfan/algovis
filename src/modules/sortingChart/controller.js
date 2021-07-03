@@ -52,7 +52,7 @@ export default class SortingChartController {
   async selectionSort() {
     let startIdx = 0;
 
-    for (let i = 0; i < this.elements.length - 1; i += 1) {
+    while (startIdx < this.elements.length) {
       let selected = { idx: startIdx, ...this.elements[startIdx] };
 
       for (let j = startIdx; j < this.elements.length; j += 1) {
@@ -78,7 +78,7 @@ export default class SortingChartController {
       startIdx += 1;
     }
 
-    this.view.markAsSorted(this.elements[startIdx].element);
+    this.view.markAsSorted(this.elements[startIdx - 1].element);
     this.view.showSuccessMessage();
   }
 
