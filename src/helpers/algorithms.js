@@ -7,7 +7,7 @@ export function bubbleSort(array) {
       const n1 = result[i];
       const n2 = result[i + 1];
 
-      if (n2 < n1) {
+      if (n1 > n2) {
         result[i] = n2;
         result[i + 1] = n1;
       }
@@ -20,7 +20,30 @@ export function bubbleSort(array) {
 }
 
 export function selectionSort(array) {
-  return array;
+  const result = [...array];
+  let startIdx = 0;
+
+  while (startIdx < result.length) {
+    let target = result[startIdx];
+
+    for (let i = startIdx; i < result.length; i += 1) {
+      const current = result[i];
+
+      if (target > current) {
+        target = current;
+      }
+    }
+
+    const targetIdx = result.indexOf(target);
+    const temp = result[targetIdx];
+
+    result[targetIdx] = result[startIdx];
+    result[startIdx] = temp;
+
+    startIdx += 1;
+  }
+
+  return result;
 }
 
 export function insertionSort(array) {
