@@ -42,6 +42,13 @@ module.exports = (_, { mode }) => {
       new HtmlWebpackPlugin({
         inject: true,
         template: path.resolve(PATHS.static, 'index.html'),
+        title: 'Algovis',
+        favicon: path.join(PATHS.static, 'favicon.ico'),
+        meta: {
+          viewport: 'width=device-width, initial-scale=1.0',
+          description: 'An app for understanding how sorting algorithms work. Visualization is presented for all popular types.',
+          'theme-color': '#ffffff',
+        },
       }),
       new CompressionPlugin(),
     ],
