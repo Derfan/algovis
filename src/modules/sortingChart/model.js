@@ -11,6 +11,10 @@ export default class SortingChartModel {
     return this.elementsArray;
   }
 
+  get arrayOfNumbers() {
+    return this.elementsArray.map(({ value }) => value);
+  }
+
   swap(idx1, idx2) {
     const temp = this.elementsArray[idx1];
 
