@@ -32,31 +32,32 @@ export default class FormController {
   addListeners() {
     this.view.lengthInput.addEventListener('change', this.changeArrayLengthHandler);
     this.view.htmlForm.addEventListener('submit', this.submitFormHandler);
+    this.view.radioButtons.forEach((radioButton) => radioButton.addEventListener('change', () => this.emitCallbacks('change', this.arrayLength)));
   }
 
-    changeArrayLengthHandler = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
+  changeArrayLengthHandler = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
 
-      const { value } = event.target;
+    const { value } = event.target;
 
-      this.arrayLength = value;
-      this.emitCallbacks('change', value);
-    }
+    this.arrayLength = value;
+    this.emitCallbacks('change', value);
+  }
 
-    submitFormHandler = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
+  submitFormHandler = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
 
-      const { elements: { sortingType } } = event.target;
+    const { elements: { sortingType } } = event.target;
 
-      this.emitCallbacks('submit', sortingType.value);
-    }
+    this.emitCallbacks('submit', sortingType.value);
+  }
 
-    init({ callbacks }) {
-      this.view.sortingTypeOptions = this.model.sortingOptions;
-      this.view.render({ arrayLength: this.arrayLength });
-      this.eventHandlers = callbacks;
-      this.addListeners();
-    }
+  init({ callbacks }) {
+    this.view.sortingTypeOptions = this.model.sortingOptions;
+    this.view.render({ arrayLength: this.arrayLength });
+    this.eventHandlers = callbacks;
+    this.addListeners();
+  }
 }
