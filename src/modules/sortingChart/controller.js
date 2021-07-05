@@ -1,4 +1,4 @@
-import { generateArray, sleep, debounce } from 'helpers';
+import { generateArray, sleep } from 'helpers';
 
 export default class SortingChartController {
   constructor(model, view) {
@@ -86,16 +86,8 @@ export default class SortingChartController {
     this[type]();
   }
 
-  addListeners() {
-    window.addEventListener('resize', debounce(() => {
-      this.view.clearChart();
-      this.init({ numberOfElements: this.elements.length });
-    }));
-  }
-
   init({ numberOfElements }) {
     this.elements = generateArray(+numberOfElements);
     this.view.render({ elements: this.elements });
-    this.addListeners();
   }
 }

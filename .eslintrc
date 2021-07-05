@@ -26,6 +26,8 @@
     },
     "rules": {
         "no-await-in-loop": "off",
-        "no-loop-func": "off"
+        "no-loop-func": "off",
+        "no-param-reassign": "off",
+        "no-mixed-operators": "off"
     }
 }

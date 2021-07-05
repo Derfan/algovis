@@ -61,3 +61,13 @@ li {
 #chart {
     border: 1px solid #ededed;
 }
+
+@media only screen and (max-width: 450px) {
+    .options-list {
+        flex-direction: column;
+    }
+
+    .options-list-item {
+        margin-left: 0;
+    }
+}
