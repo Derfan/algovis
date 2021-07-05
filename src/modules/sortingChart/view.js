@@ -15,7 +15,7 @@ function createSvgFigure({
 }) {
   const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 
-  rect.setAttribute('width', width);
+  rect.setAttribute('width', `${width}%`);
   rect.setAttribute('height', height);
   rect.setAttribute('fill', fillColor);
   rect.setAttribute('stroke', strokeColor);
@@ -30,6 +30,10 @@ function markElement(element, color) {
   const figure = element.querySelector('rect');
 
   figure.style.fill = color;
+}
+
+function percentsToPixels(value, full) {
+  return full * value / 100;
 }
 
 export default class SortingChartView {
@@ -58,16 +62,16 @@ export default class SortingChartView {
   }
 
   getElementCoordinates(element) {
-    return element.getAttribute('transform').match(this.attributeRegExp)[1].split(', ');
+    return element.style.transform.match(this.attributeRegExp)[1].split(', ');
   }
 
   generateElementsList(values) {
-    const { width: containerWidth, height: containerHeight } = this.chartSize;
+    const { height: containerHeight } = this.chartSize;
     const { itemBorderWidth } = this.settings;
 
     return values.map((value, idx, arr) => {
-      const gapWidth = containerWidth * 0.01;
-      const width = (containerWidth - gapWidth * (arr.length + 1)) / arr.length;
+      const gapWidth = 1;
+      const width = (100 - gapWidth * (arr.length + 1)) / arr.length;
       const x = (idx + 1) * gapWidth + idx * width;
       const y = containerHeight - value - 3 * itemBorderWidth;
 
@@ -81,13 +85,14 @@ export default class SortingChartView {
   }
 
   setUpChart() {
-    this.root.setAttribute('width', '80vw');
-    this.root.setAttribute('height', '75vh');
+    this.root.setAttribute('width', '95vw');
+    this.root.setAttribute('height', '70vh');
   }
 
   createChartElement({
     x, y, width, value,
   }) {
+    const { width: chartWidth } = this.chartSize;
     const {
       itemColorBase, itemBorderRadius, itemBorderWidth, itemBorderColor, transitionDelayMS,
     } = this.settings;
@@ -101,12 +106,13 @@ export default class SortingChartView {
       borderRadius: itemBorderRadius,
       transitionDelay: transitionDelayMS / 1000 / 2,
     });
-    const textBlock = createSvgText({ value, x: width / 2, y: -5 });
+    const elemWidthInPixels = percentsToPixels(chartWidth, width);
+    const textBlock = createSvgText({ value, x: elemWidthInPixels / 2, y: -5 });
 
     elementWrapper.appendChild(figure);
     elementWrapper.appendChild(textBlock);
     elementWrapper.style.transition = `transform ${transitionDelayMS / 1000}s`;
-    elementWrapper.setAttribute('transform', `translate(${x}, ${y})`);
+    elementWrapper.style.transform = `translate(${x}%, ${y}px)`;
 
     return elementWrapper;
   }
@@ -128,8 +134,8 @@ export default class SortingChartView {
     const [x1, y1] = this.getElementCoordinates(element1);
     const [x2, y2] = this.getElementCoordinates(element2);
 
-    element1.setAttribute('transform', `translate(${x2}, ${y1})`);
-    element2.setAttribute('transform', `translate(${x1}, ${y2})`);
+    element1.style.transform = `translate(${x2}, ${y1})`;
+    element2.style.transform = `translate(${x1}, ${y2})`;
   }
 
   markAsProcessing(element) {
