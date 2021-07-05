@@ -5,6 +5,7 @@ export default class FormView {
     this.form = document.getElementById('settings');
     this.input = null;
     this.lengthText = null;
+    this.radioButtons = [];
     this.sortingOptions = [];
   }
 
@@ -56,6 +57,7 @@ export default class FormView {
       '',
     );
     this.form.appendChild(list);
+    this.radioButtons = document.querySelectorAll("input[name='sortingType']");
   }
 
   renderSubmitButton() {

@@ -36,8 +36,6 @@ export default class SortingChartView {
   constructor() {
     this.root = document.getElementById('chart');
     this.settings = {
-      width: 800,
-      height: 500,
       transitionDelayMS: 500,
       itemBorderRadius: 10,
       itemBorderColor: '#000000',
@@ -55,18 +53,23 @@ export default class SortingChartView {
     return this.settings.transitionDelayMS;
   }
 
+  get chartSize() {
+    return this.root.getBoundingClientRect();
+  }
+
   getElementCoordinates(element) {
     return element.getAttribute('transform').match(this.attributeRegExp)[1].split(', ');
   }
 
   generateElementsList(values) {
-    const { width: containerWidth, height: containerHeight, itemBorderWidth } = this.settings;
+    const { width: containerWidth, height: containerHeight } = this.chartSize;
+    const { itemBorderWidth } = this.settings;
 
     return values.map((value, idx, arr) => {
       const gapWidth = containerWidth * 0.01;
       const width = (containerWidth - gapWidth * (arr.length + 1)) / arr.length;
       const x = (idx + 1) * gapWidth + idx * width;
-      const y = containerHeight - value - itemBorderWidth;
+      const y = containerHeight - value - 3 * itemBorderWidth;
 
       return {
         value,
@@ -78,11 +81,8 @@ export default class SortingChartView {
   }
 
   setUpChart() {
-    const { width, height } = this.settings;
-
-    this.root.setAttribute('width', width);
-    this.root.setAttribute('height', height);
-    this.root.setAttribute('viewPort', `0 0 ${width} ${height}`);
+    this.root.setAttribute('width', '80vw');
+    this.root.setAttribute('height', '75vh');
   }
 
   createChartElement({
@@ -115,8 +115,12 @@ export default class SortingChartView {
     elements.forEach(({ element }) => this.root.appendChild(element));
   }
 
-  update({ elements }) {
+  clearChart() {
     this.root.innerHTML = '';
+  }
+
+  update({ elements }) {
+    this.clearChart();
     this.renderChartElements(elements);
   }
 
@@ -147,7 +151,7 @@ export default class SortingChartView {
   }
 
   showSuccessMessage() {
-    const textElement = createSvgText({ x: this.settings.width / 2, y: 200, value: 'Done!' });
+    const textElement = createSvgText({ x: this.chartSize.width / 2, y: this.chartSize.height / 2, value: 'Done!' });
 
     textElement.style.fontSize = '40px';
     textElement.style.fill = 'red';
