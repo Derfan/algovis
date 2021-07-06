@@ -36,6 +36,10 @@ function percentsToPixels(value, full) {
   return full * value / 100;
 }
 
+function pixelsToPercents(value, full) {
+  return value / full * 100;
+}
+
 export default class SortingChartView {
   constructor() {
     this.root = document.getElementById('chart');
@@ -48,6 +52,7 @@ export default class SortingChartView {
       itemColorProcessing: '#F1E409',
       itemColorSuccess: '#06e4ac',
     };
+    this.gapWidth = 1;
     this.attributeRegExp = /\((.*)\)/;
 
     this.setUpChart();
@@ -70,9 +75,8 @@ export default class SortingChartView {
     const { itemBorderWidth } = this.settings;
 
     return values.map((value, idx, arr) => {
-      const gapWidth = 1;
-      const width = (100 - gapWidth * (arr.length + 1)) / arr.length;
-      const x = (idx + 1) * gapWidth + idx * width;
+      const width = (100 - this.gapWidth * (arr.length + 1)) / arr.length;
+      const x = (idx + 1) * this.gapWidth + idx * width;
       const y = containerHeight - value - 3 * itemBorderWidth;
 
       return {
@@ -136,6 +140,36 @@ export default class SortingChartView {
 
     element1.style.transform = `translate(${x2}, ${y1})`;
     element2.style.transform = `translate(${x1}, ${y2})`;
+  }
+
+  moveRight(element, step = 1) {
+    const [currentX, y] = this.getElementCoordinates(element);
+    const { width: chartWidth } = this.chartSize;
+    const { width: elementWidth } = element.getBoundingClientRect();
+    const position = step * (pixelsToPercents(elementWidth, chartWidth) + this.gapWidth);
+
+    element.style.transform = `translate(${parseFloat(currentX) + position}%, ${y})`;
+  }
+
+  moveLeft(element, step = 1) {
+    const [currentX, y] = this.getElementCoordinates(element);
+    const { width: chartWidth } = this.chartSize;
+    const { width: elementWidth } = element.getBoundingClientRect();
+    const position = step * (pixelsToPercents(elementWidth, chartWidth) + this.gapWidth);
+
+    element.style.transform = `translate(${parseFloat(currentX) - position}%, ${y})`;
+  }
+
+  moveUp(element) {
+    const [x, y] = this.getElementCoordinates(element);
+
+    element.style.transform = `translate(${x}, ${parseFloat(y) - 300}px)`;
+  }
+
+  moveDown(element) {
+    const [x, y] = this.getElementCoordinates(element);
+
+    element.style.transform = `translate(${x}, ${parseFloat(y) + 300}px)`;
   }
 
   markAsProcessing(element) {
