@@ -54,9 +54,10 @@ function insertionSort(array) {
     const current = unsorted[0];
     let position = sorted.length;
 
-    for (let i = 0; i < sorted.length; i += 1) {
+    for (let i = sorted.length - 1; i >= 0; i -= 1) {
       if (current < sorted[i]) {
-        position = i;
+        position -= 1;
+      } else {
         break;
       }
     }
