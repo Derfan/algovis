@@ -32,12 +32,12 @@ export default class SortingChartController {
         this.view.markAsProcessing(el1);
         this.view.markAsProcessing(el2);
 
-        await sleep(this.view.transitionDelay).then(() => {
-          if (n1 > n2) {
-            this.model.swap(i, i + 1);
-            this.view.swap(el1, el2);
-          }
-        });
+        await sleep(this.view.transitionDelay);
+
+        if (n1 > n2) {
+          this.model.swap(i, i + 1);
+          this.view.swap(el1, el2);
+        }
 
         this.view.markAsBase(el1);
         this.view.markAsBase(el2);
@@ -61,15 +61,15 @@ export default class SortingChartController {
         this.view.markAsSorted(selected.element);
         this.view.markAsProcessing(current.element);
 
-        await sleep(this.view.transitionDelay).then(() => {
-          if (selected.value > current.value) {
-            this.view.markAsBase(selected.element);
-            selected = current;
-            this.view.markAsSorted(selected.element);
-          } else {
-            this.view.markAsBase(current.element);
-          }
-        });
+        await sleep(this.view.transitionDelay);
+
+        if (selected.value > current.value) {
+          this.view.markAsBase(selected.element);
+          this.view.markAsSorted(current.element);
+          selected = current;
+        } else {
+          this.view.markAsBase(current.element);
+        }
       }
 
       this.view.swap(this.elements[startIdx].element, selected.element);
@@ -93,16 +93,17 @@ export default class SortingChartController {
       let position = sorted.length;
 
       this.view.moveUp(current.element);
-      await sleep(this.view.transitionDelay);
+      this.view.markAsProcessing(current.element);
 
-      for (let i = 0; i < sorted.length; i += 1) {
-        if (current.value > sorted[i].value) {
-          position = i;
+      for (let i = sorted.length - 1; i >= 0; i -= 1) {
+        if (current.value >= sorted[i].value) {
           break;
+        } else {
+          position -= 1;
+          await sleep(this.view.transitionDelay);
+          this.view.moveRight(sorted[i].element);
+          this.view.moveLeft(current.element);
         }
-        await sleep(this.view.transitionDelay);
-        this.view.moveRight(sorted[i].element);
-        this.view.moveLeft(current.element);
       }
 
       await sleep(this.view.transitionDelay);

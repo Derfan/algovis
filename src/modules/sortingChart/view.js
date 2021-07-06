@@ -52,7 +52,7 @@ export default class SortingChartView {
       itemColorProcessing: '#F1E409',
       itemColorSuccess: '#06e4ac',
     };
-    this.gapWidth = 1;
+    this.gapWidth = 0.5;
     this.attributeRegExp = /\((.*)\)/;
 
     this.setUpChart();
@@ -146,18 +146,18 @@ export default class SortingChartView {
     const [currentX, y] = this.getElementCoordinates(element);
     const { width: chartWidth } = this.chartSize;
     const { width: elementWidth } = element.getBoundingClientRect();
-    const position = step * (pixelsToPercents(elementWidth, chartWidth) + this.gapWidth);
+    const distance = step * (pixelsToPercents(elementWidth, chartWidth) + this.gapWidth);
 
-    element.style.transform = `translate(${parseFloat(currentX) + position}%, ${y})`;
+    element.style.transform = `translate(${parseFloat(currentX) + distance}%, ${y})`;
   }
 
   moveLeft(element, step = 1) {
     const [currentX, y] = this.getElementCoordinates(element);
     const { width: chartWidth } = this.chartSize;
     const { width: elementWidth } = element.getBoundingClientRect();
-    const position = step * (pixelsToPercents(elementWidth, chartWidth) + this.gapWidth);
+    const distance = step * (pixelsToPercents(elementWidth, chartWidth) + this.gapWidth);
 
-    element.style.transform = `translate(${parseFloat(currentX) - position}%, ${y})`;
+    element.style.transform = `translate(${parseFloat(currentX) - distance}%, ${y})`;
   }
 
   moveUp(element) {
