@@ -82,6 +82,41 @@ export default class SortingChartController {
     this.view.showSuccessMessage();
   }
 
+  async insertionSort() {
+    const sorted = [this.elements[0]];
+    const unsorted = [...this.elements.slice(1)];
+
+    this.view.markAsSorted(sorted[0].element);
+
+    while (sorted.length < this.elements.length) {
+      const current = unsorted[0];
+      let position = sorted.length;
+
+      this.view.moveUp(current.element);
+      await sleep(this.view.transitionDelay);
+
+      for (let i = 0; i < sorted.length; i += 1) {
+        if (current.value > sorted[i].value) {
+          position = i;
+          break;
+        }
+        await sleep(this.view.transitionDelay);
+        this.view.moveRight(sorted[i].element);
+        this.view.moveLeft(current.element);
+      }
+
+      await sleep(this.view.transitionDelay);
+      this.view.moveDown(current.element);
+      this.view.markAsSorted(current.element);
+
+      unsorted.shift();
+      sorted.splice(position, 0, current);
+      this.model.replaceElement(this.elements.indexOf(current), position);
+    }
+
+    this.view.showSuccessMessage();
+  }
+
   runSorting = (type) => {
     this[type]();
   }
